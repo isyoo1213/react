@@ -1,4 +1,6 @@
+import ExpenseDate from './ExpenseDate.js';
 import './ExpenseItem.css';
+import './ExpenseDate.js';
 
 function ExpenseItem(props) {
 
@@ -8,10 +10,9 @@ function ExpenseItem(props) {
     // const month = now.getMonth()+1;
     // const date = now.getDate();
 
-    const korYear = props.date.toLocaleString('ko-KR', {year:'numeric'});
+
     // const korYear = props.date.getFullYear();
-    const korMonth = props.date.toLocaleString('ko-KR', {month:'long'});
-    const korDay = props.date.toLocaleString('ko-KR', {day:'2-digit'});
+
     
     // const expenseDate = `${year}.${month}.${date}`
     // const expenseTitle = 'Car Insurance';
@@ -19,11 +20,7 @@ function ExpenseItem(props) {
 
   return (
     <div className='expense-item'>
-      <div>
-        <div>{korYear}</div>  
-        <div>{korMonth}</div>
-        <div>{korDay}</div>
-      </div>
+      <ExpenseDate date={props.date}/>  
       <div className='expense-item__description'>
         <h2>{props.title}</h2>
         <div className='expense-item__price'>{props.amount}</div>
