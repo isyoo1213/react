@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import ExpenseDate from './ExpenseDate.js';
 import './ExpenseItem.css';
 import './ExpenseDate.js';
@@ -20,7 +20,21 @@ const ExpenseItem = (props) => {
     // const expenseTitle = 'Car Insurance';
     // const expenseAmount = 30000;
 
-    let title = props.title;
+    // 특별한 변수를 생성하는 것과 유사 >> 컴포넌트 함수가 다시 호출되도록
+    const [title, setTitle] = useState(props.title);
+    //첫 번째 값 - 변수 자체 / 현재 상태의 값 >> title = props.title
+    //두 번쨰 값 - 업데이트 함수 >> 새로운 값을 할당하기 위해 호출할 수 있는 함수
+    //>>> state 변수가 변할 때 컴포넌트 함수를 다시 호출하고 싶으면 업데이트 함수를 호출하면 됨
+    //>>> state 함수가 포함된 컴포넌트를 재평가해야 한다고 알림 >> 컴포넌트 함수와 JSX 재평가
+
+    const clickHandler = () => {
+      setTitle('Updated');
+      //업데이트 함수 실행 후 바로 값이 변하는 것이 아닌 해당 state변수의 업데이트를 예약
+      //>> 다음 출력에 찍히는 값은 기존의 props.title이 그대로 출력됨
+      //>> 이후 컴포넌트 함수, JSX를 재평가 후 업데이트 된 내용을 렌더함
+      console.log(title);
+    }
+
 
   return (
     <Card className='expense-item'>
@@ -29,6 +43,7 @@ const ExpenseItem = (props) => {
         <h2>{title}</h2>
         <div className='expense-item__price'>{props.amount}</div>
       </div>
+      <button onClick={clickHandler}>Change Title</button>
     </Card>
   );
 }
