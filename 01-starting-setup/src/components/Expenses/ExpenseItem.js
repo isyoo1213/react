@@ -23,6 +23,7 @@ const ExpenseItem = (props) => {
     // 특별한 변수를 생성하는 것과 유사 >> 컴포넌트 함수가 다시 호출되도록
     
     //-----섹션5 - 67 State 저장 목록 사용에서 title 업데이트 함수가 문제가 있어 주석처리.------
+    //관련 설명은 68에 3:00 - 추가한 새 item이 stateful하면 기존의 stateful을 덮어써버림
     /*const [title, setTitle] = useState(props.title); */
 
     //첫 번째 값 - 변수 자체 / 현재 상태의 값 >> title = props.title
