@@ -15,6 +15,11 @@ const Expenses = (props) => {
     //콘솔에는 state변수의 값이 set함수를 통해 업데이트 되기 전의 값이 출력
     //이후 JSX, Component 재평가 후에 업데이트된 값을 렌더링함
   };
+
+  const filteredExpenses = props.items.filter((expense) => {
+    return expense.date.getFullYear().toString() === filteredYear;
+  });
+
   return (
     <div>
       <Card className="expenses">
@@ -22,7 +27,7 @@ const Expenses = (props) => {
           selected={filteredYear}
           onChangeFilter={filterChangeHandler}
         />
-        {props.items.map((expense) => (
+        {filteredExpenses.map((expense) => (
           <ExpenseItem
             key={expense.id}
             title={expense.title}
