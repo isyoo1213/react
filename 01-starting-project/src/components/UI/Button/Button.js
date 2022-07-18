@@ -38,7 +38,7 @@ import styles from './Button.module.css';
 
 const Button = props => {
   return (
-    //styles는 객체, 객체의 속성을 통해 css 클래스를 접근하고, 새로운 고유한 wrapper클래스로 생성해준다
+    //styles는 객체, 객체의 속성을 통해 css 클래스를 접근하고, 동적으로 새로운 고유한 wrapper클래스로 생성해준다
     <button type={props.type} className={styles.button} onClick={props.onClick}>
       {props.children}
     </button>
