@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Card from "../UI/Card.js";
 import styles from "./AddUser.module.css";
 import Button from "../UI/Button.js";
+import ErrorModal from "../UI/ErrorModal.js";
 
 const AddUser = (props) => {
   const [enteredUsername, setEnteredUsername] = useState("");
@@ -9,16 +10,16 @@ const AddUser = (props) => {
 
   const addUserHandler = (event) => {
     event.preventDefault();
-    if(enteredUsername.trim().length === 0 || enteredAge.trim().length === 0){
+    if (enteredUsername.trim().length === 0 || enteredAge.trim().length === 0) {
       return;
     }
-    if(+enteredAge < 1){
+    if (+enteredAge < 1) {
       return;
     }
     console.log(enteredUsername, enteredAge);
     props.onAddUser(enteredUsername, enteredAge);
-    setEnteredUsername('');
-    setEnteredAge('');
+    setEnteredUsername("");
+    setEnteredAge("");
   };
 
   const usernameChangeHandler = (event) => {
@@ -32,15 +33,28 @@ const AddUser = (props) => {
   };
 
   return (
-    <Card className={styles.input}>
-      <form onSubmit={addUserHandler}>
-        <label htmlFor="username">Username</label>
-        <input id="username" type="text" value={enteredUsername} onChange={usernameChangeHandler} />
-        <label htmlFor="age">Age(Years)</label>
-        <input id="age" type="number" value={enteredAge} onChange={ageChangeHandler} />
-        <Button type="submit">Add User</Button>
-      </form>
-    </Card>
+    <div>
+      <ErrorModal title="An Error occured" message="Something went wrong!" />
+      <Card className={styles.input}>
+        <form onSubmit={addUserHandler}>
+          <label htmlFor="username">Username</label>
+          <input
+            id="username"
+            type="text"
+            value={enteredUsername}
+            onChange={usernameChangeHandler}
+          />
+          <label htmlFor="age">Age(Years)</label>
+          <input
+            id="age"
+            type="number"
+            value={enteredAge}
+            onChange={ageChangeHandler}
+          />
+          <Button type="submit">Add User</Button>
+        </form>
+      </Card>
+    </div>
   );
 };
 
