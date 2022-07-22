@@ -41,7 +41,11 @@ const AddUser = (props) => {
     props.onAddUser(enteredName, enteredAge);
     nameInputRef.current.value = '';
     ageInputRef.current.value = '';
-    {/* 원래 DOM요소를 리액트를 거치지 않고 직접적으로 수정하는 것은 바람직하지 않으나, 사용자의 입력값만 바꿔주므로 사용 */}
+    {/* 이는 일반적인 DOM API를 통해 값을 수정하는 방법 > 제어되지 않음 > Input으로 부터의 입력요소의 state를 제어하지 않음
+        원래 DOM요소를 리액트를 거치지 않고 직접적으로 수정하는 것은 바람직하지 않으나, 사용자의 입력값만 바꿔주므로 사용 
+        + 입력 요소 (대표적으로 Form)는 브라우저에 의한 내부의 state를 가지는 경향이 있음 
+          사용자의 입력을 받고 저장하는 인풋 요소가 이미 구성됨 
+        + state를 통해 관리할 때는, 입력 하나하나를 state를 통해 업데이트하고, 다시 Input의 값으로 전송 > 제어된 방식*/}
   };
 
   const errorHandler = () => {
