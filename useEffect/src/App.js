@@ -15,7 +15,7 @@ function App() {
       {/* useEffect를 사용하지 않을 시, state 설정 함수를 호출할 때마다 컴포넌트를 재평가위해 재실행 > 무한루프 
           컴포넌트 내에 속해있으므로 모든 컴포넌트의 재평가 후에 리액트에 의해 실행됨*/}
     }
-  });
+  },[]);
 
   const loginHandler = (email, password) => {
     // We should of course check email and password
