@@ -5,20 +5,30 @@ import classes from "./Login.module.css";
 import Button from "../UI/Button/Button";
 
 const emailReducer = (state, action) => {
-  if(action.type === 'USER_EMAIL_INPUT'){
-    return {value: action.payload, isValid: action.payload.includes('@')};
+  if (action.type === "USER_EMAIL_INPUT") {
+    return { value: action.payload, isValid: action.payload.includes("@") };
   }
-  if(action.type === 'USER_INPUT_DONE'){
-    return {value: state.value, isValid:state.value.includes('@')};
+  if (action.type === "USER_EMAIL_INPUT_DONE") {
+    return { value: state.value, isValid: state.value.includes("@") };
   }
-  return {value:'', isValid:false};
+  return { value: "", isValid: false };
+};
+
+const passwordReducer = (state, action) => {
+  if (action.type === "USER_PW_INPUT") {
+    return { value: action.payload, isValid: action.payload.trim().length > 6 };
+  }
+  if (action.type === "USER_PW_INPUT_DONE") {
+    return { value: state.value, isValid: state.value.trim().length > 6 };
+  }
+  return { value: "", isValid: false };
 };
 
 const Login = (props) => {
   // const [enteredEmail, setEnteredEmail] = useState("");
   // const [emailIsValid, setEmailIsValid] = useState(); // 위 두 state는 Reducer를 활용해 emailState로 대체
-  const [enteredPassword, setEnteredPassword] = useState("");
-  const [passwordIsValid, setPasswordIsValid] = useState();
+  // const [enteredPassword, setEnteredPassword] = useState("");
+  // const [passwordIsValid, setPasswordIsValid] = useState(); // 위 두 state는 passwordState로 대체
   const [formIsValid, setFormIsValid] = useState(false);
 
   // useEffect(() => {
@@ -40,38 +50,46 @@ const Login = (props) => {
   //   };
   // }, [enteredEmail, enteredPassword]);
 
-  const [emailState, dispatchEmail] = useReducer(emailReducer, {value:'', isValid:false});
+  const [emailState, dispatchEmail] = useReducer(emailReducer, {
+    value: "",
+    isValid: false,
+  });
+
+  const [passwordState, dispatchPassword] = useReducer(passwordReducer, {
+    value: "",
+    isValid: false,
+  });
 
   const emailChangeHandler = (event) => {
-    dispatchEmail({type:'USER_EMAIL_INPUT', payload: event.target.value});
+    dispatchEmail({ type: "USER_EMAIL_INPUT", payload: event.target.value });
 
     setFormIsValid(
-      event.target.value.includes("@") && enteredPassword.trim().length > 6
+      event.target.value.includes("@") && passwordState.value.trim().length > 6
     );
-    {/* state가 이전 state의 상태에 의존하고 있으나, 동일한 state가 아닌 서로 다른 두 개의 state이므로 
+    {
+      /* state가 이전 state의 상태에 의존하고 있으나, 동일한 state가 아닌 서로 다른 두 개의 state이므로 
         함수형 폼을 전달하지 못함 (setFormIsValid라는 state의 변화에 enteredEmail과 enteredPassword가 영향)
-        >> useReduce를 사용하기 좋은 조건 */}
+        >> useReduce를 사용하기 좋은 조건 */
+    }
   };
 
   const passwordChangeHandler = (event) => {
-    setEnteredPassword(event.target.value);
+    dispatchPassword({ type: "USER_PW_INPUT", payload: event.target.value });
 
-    setFormIsValid(
-      emailState.isValid && event.target.value.trim().length > 6
-    );
+    setFormIsValid(emailState.isValid && event.target.value.trim().length > 6);
   };
 
   const validateEmailHandler = () => {
-    dispatchEmail({type:'USER_INPUT_DONE', });
+    dispatchEmail({ type: "USER_EMAIL_INPUT_DONE" });
   };
 
   const validatePasswordHandler = () => {
-    setPasswordIsValid(enteredPassword.trim().length > 6);
+    dispatchPassword({ type: "USER_PW_INPUT_DONE" });
   };
 
   const submitHandler = (event) => {
     event.preventDefault();
-    props.onLogin(emailState.value, enteredPassword);
+    props.onLogin(emailState.value, passwordState.value);
   };
 
   return (
@@ -93,14 +111,14 @@ const Login = (props) => {
         </div>
         <div
           className={`${classes.control} ${
-            passwordIsValid === false ? classes.invalid : ""
+            passwordState.isValid === false ? classes.invalid : ""
           }`}
         >
           <label htmlFor="password">Password</label>
           <input
             type="password"
             id="password"
-            value={enteredPassword}
+            value={passwordState.value}
             onChange={passwordChangeHandler}
             onBlur={validatePasswordHandler}
           />
