@@ -31,25 +31,6 @@ const Login = (props) => {
   // const [passwordIsValid, setPasswordIsValid] = useState(); // 위 두 state는 passwordState로 대체
   const [formIsValid, setFormIsValid] = useState(false);
 
-  // useEffect(() => {
-  //   const identifier = setTimeout(() => {
-  //     console.log("Checking Form-Validity");
-  //     setFormIsValid(
-  //       enteredEmail.includes("@") && enteredPassword.trim().length > 6
-  //     );
-  //   }, 500);
-  //   {
-  //     /* useEffect()의 첫 인자는 return으로 함수(익명o 정의된 함수o) 클린업 함수를 가질 수 있음
-  //       useEffect()의 첫 인자 함수가 실행되기 전에(최초 실행은 제외) 클린업 프로세스를 실행
-  //       해당 effect를 특정한 컴포넌트가 DOM에서 언마운트될 때마다(컴포넌트가 재사용 될 때마다) 실행
-  //       첫 사이드 이펙트 함수가 실행되기 전에는(마운트 후 처음으로 effect가 실행되기 전) 실행되지 않음 */
-  //   }
-  //   return () => {
-  //     console.log("Clean Up");
-  //     clearTimeout(identifier);
-  //   };
-  // }, [enteredEmail, enteredPassword]);
-
   const [emailState, dispatchEmail] = useReducer(emailReducer, {
     value: "",
     isValid: false,
@@ -59,6 +40,27 @@ const Login = (props) => {
     value: "",
     isValid: false,
   });
+
+  //객체 디스트럭쳐링을 통해 isValid 속성만 가져오기
+  const { isValid: emailIsValid } = emailState;
+  const { isValid: passwordIsValid } = passwordState;
+
+  useEffect(() => {
+    const identifier = setTimeout(() => {
+      console.log("Checking Form-Validity");
+      setFormIsValid(emailIsValid && passwordIsValid);
+    }, 500);
+    {
+      /* useEffect()의 첫 인자는 return으로 함수(익명o 정의된 함수o) 클린업 함수를 가질 수 있음
+        useEffect()의 첫 인자 함수가 실행되기 전에(최초 실행은 제외) 클린업 프로세스를 실행
+        해당 effect를 특정한 컴포넌트가 DOM에서 언마운트될 때마다(컴포넌트가 재사용 될 때마다) 실행
+        첫 사이드 이펙트 함수가 실행되기 전에는(마운트 후 처음으로 effect가 실행되기 전) 실행되지 않음 */
+    }
+    return () => {
+      console.log("Clean Up");
+      clearTimeout(identifier);
+    };
+  }, [emailIsValid, passwordIsValid]);
 
   const emailChangeHandler = (event) => {
     dispatchEmail({ type: "USER_EMAIL_INPUT", payload: event.target.value });
