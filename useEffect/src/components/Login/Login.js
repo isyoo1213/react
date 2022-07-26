@@ -1,8 +1,9 @@
-import React, { useState, useEffect, useReducer } from "react";
+import React, { useState, useEffect, useReducer, useContext } from "react";
 
 import Card from "../UI/Card/Card";
 import classes from "./Login.module.css";
 import Button from "../UI/Button/Button";
+import AuthContext from "../../context/auth-context";
 
 const emailReducer = (state, action) => {
   if (action.type === "USER_EMAIL_INPUT") {
@@ -41,6 +42,8 @@ const Login = (props) => {
     isValid: false,
   });
 
+  const authCtx = useContext(AuthContext);
+
   //객체 디스트럭쳐링을 통해 isValid 속성만 가져오기
   const { isValid: emailIsValid } = emailState;
   const { isValid: passwordIsValid } = passwordState;
@@ -65,9 +68,11 @@ const Login = (props) => {
   const emailChangeHandler = (event) => {
     dispatchEmail({ type: "USER_EMAIL_INPUT", payload: event.target.value });
 
+    {/*
     setFormIsValid(
       event.target.value.includes("@") && passwordState.value.trim().length > 6
     );
+  */}
     {
       /* state가 이전 state의 상태에 의존하고 있으나, 동일한 state가 아닌 서로 다른 두 개의 state이므로 
         함수형 폼을 전달하지 못함 (setFormIsValid라는 state의 변화에 enteredEmail과 enteredPassword가 영향)
@@ -78,7 +83,9 @@ const Login = (props) => {
   const passwordChangeHandler = (event) => {
     dispatchPassword({ type: "USER_PW_INPUT", payload: event.target.value });
 
+    {/*
     setFormIsValid(emailState.isValid && event.target.value.trim().length > 6);
+    */}
   };
 
   const validateEmailHandler = () => {
@@ -91,7 +98,7 @@ const Login = (props) => {
 
   const submitHandler = (event) => {
     event.preventDefault();
-    props.onLogin(emailState.value, passwordState.value);
+    authCtx.onLogin(emailState.value, passwordState.value);
   };
 
   return (
