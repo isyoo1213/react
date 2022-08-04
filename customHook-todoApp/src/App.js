@@ -17,12 +17,14 @@ function App() {
     setTasks(loadedTasks);
   };
 
-  const httpData = useHttp({
-    url: "https://customhook-todo-default-rtdb.asia-southeast1.firebasedatabase.app/tasks.json",
+  const httpData = useHttp(
+    {
+      url: "https://customhook-todo-default-rtdb.asia-southeast1.firebasedatabase.app/tasks.json",
+    },
     transformTasks
-  });
+  );
 
-  const { isLoading, error, sendRequest:fetchTasks } = httpData;
+  const { isLoading, error, sendRequest: fetchTasks } = httpData;
 
   // const fetchTasks = async (taskText) => {
   //   setIsLoading(true);
@@ -54,7 +56,9 @@ function App() {
   useEffect(() => {
     fetchTasks();
   }, []);
-  {/* 현재 상태에서 fetchTasks를 의존성에 추가하면 무한루프 이슈 발생 */}
+  {
+    /* 현재 상태에서 fetchTasks를 의존성에 추가하면 무한루프 이슈 발생 */
+  }
 
   const taskAddHandler = (task) => {
     setTasks((prevTasks) => prevTasks.concat(task));
