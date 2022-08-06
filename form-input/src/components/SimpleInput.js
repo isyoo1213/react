@@ -14,6 +14,12 @@ const SimpleInput = (props) => {
 
   const nameInputChangeHandler = (event) => {
     setEnteredName(event.target.value);
+
+    if (event.target.value.trim() !== "") {
+      setEnteredNameIsValid(true);
+    }
+    {/* if 조건을 state변수를 사용하지 않는 이유는 state의 업데이트는 비동기적이므로 이전 state를 참고함 */}
+
   };
 
   const nameInputBlurHandler = () => {
@@ -21,10 +27,10 @@ const SimpleInput = (props) => {
 
     if (enteredName.trim() === "") {
       setEnteredNameIsValid(false);
-      return;
+    } else {
+      setEnteredNameIsValid(true);
     }
-    setEnteredNameIsValid(true);
-
+    
   }
 
   const formSubmissionHandler = (event) => {
@@ -34,7 +40,6 @@ const SimpleInput = (props) => {
 
     if (enteredName.trim() === "") {
       setEnteredNameIsValid(false);
-      return;
     }
     setEnteredNameIsValid(true);
 
