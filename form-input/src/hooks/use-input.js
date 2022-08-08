@@ -1,28 +1,52 @@
-import { useState } from 'react';
+import { useState, useReducer } from 'react';
+
+const inputStateReducer = (state, action) => {
+  if(action.type === 'INPUT'){
+    return {value: action.payload, isTouched: state.isTouched}
+    {/* isTouched는 그대로 둠 (초기값이 false이고, 입력값과 별개로 첫 Blur된 이후에만 true로 쭉 트리거됨) */}
+  }
+  if(action.type === 'BLUR'){
+    return {value: state.value, isTouched: true}
+  }
+  if(action.type === 'RESET'){
+    return {value: '', isTouched: false}
+  }
+  return inputStateReducer
+}
+
+const initialInputState = {
+  value: '',
+  isTouched: false
+}
 
 const useInput = (validateValue) => {
 
-  const [enteredValue, setEnteredValue] = useState('');
-  const [isTouched, setIsTouched] = useState(false);
+  const [inputState, dispatch] = useReducer(inputStateReducer, initialInputState)
 
-  const valueIsValid = validateValue(enteredValue);
-  const hasError = !valueIsValid && isTouched; 
+  // const [enteredValue, setEnteredValue] = useState('');
+  // const [isTouched, setIsTouched] = useState(false);
+
+  const valueIsValid = validateValue(inputState.value);
+  const hasError = !valueIsValid && inputState.isTouched; 
 
   const valueChangeHandler = (event) => {
-    setEnteredValue(event.target.value);
+    dispatch({type: 'INPUT', payload: event.target.value});
+    // setEnteredValue(event.target.value);
   }
 
   const inputBlurHandler = () => {
-    setIsTouched(true);
+    dispatch({type: 'BLUR'})
+    // setIsTouched(true);
   }
 
   const reset = () => {
-    setEnteredValue('');
-    setIsTouched(false);
+    dispatch({type: 'RESET'})
+    // setEnteredValue('');
+    // setIsTouched(false);
   }
 
   return {
-    value: enteredValue,
+    value: inputState.value,
     hasError: hasError,
     isValid: valueIsValid,
     valueChangeHandler,
