@@ -13,11 +13,11 @@ import { createSlice, configureStore} from '@reduxjs/toolkit';
 
 export const INCREMENT = 'increment';
 
-const initialState = {counter: 0, showCounter: true}
+const initialCounterState = {counter: 0, showCounter: true}
 
 const counterSlice = createSlice({
   name: 'counter',
-  initialState: initialState,
+  initialState: initialCounterState,
   reducers: {
     increment(state){
       state.counter++;
@@ -85,8 +85,28 @@ const counterSlice = createSlice({
 // const store = createStore(counterSlice.reducer);
 // {/* counterSlice.reducer는 기존의 counterReducer구조에서 if case를 대체한 reducers를 통합한 reducer를 반환함 */}
 
+const initialAuthState = {
+  isAuthenticated: false,
+}
+
+const authSlice = createSlice({
+  name: 'auth',
+  initialState: initialAuthState,
+  reducers: {
+    login(state){
+      state.isAuthenticated = true;
+    },
+    logout(state){
+      state.isAuthenticated = false;
+    }
+  }
+});
+
 const store = configureStore({
-  reducer: counterSlice.reducer
+  reducer:{
+    counter: counterSlice.reducer,
+    auth: authSlice.reducer
+  } 
 });
 {/* configureStore()는 reducer함수가 아닌 '설정' 객체를 받음 >> 설정 객체는 reducer 프로퍼티를 설정 
     reducer 프로퍼티 - (not reducer's') - redux든 reduxtoolkit이든 store는 주요 reducer 함수 한가지만 받음
@@ -106,5 +126,6 @@ export const counterActions = counterSlice.actions;
     >> 즉, action 객체를 따로 생성할 필요 없이 Slice가 자동생성한 actions key 및 객체를 사용하면 됨 
     >> 생성된 action객체 이름과 앞서 정의한 리듀서 메서드의 이름이 같으면 action이 자동으로 전달되어 서로다른 매서드 작동
     이제 action과 store를 모두 export 하고 있으므로 이를 사용할 컴포넌트에서 작업*/}
+export const authActions = authSlice.actions;
 
 export default store;
