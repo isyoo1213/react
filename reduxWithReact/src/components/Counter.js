@@ -1,7 +1,10 @@
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import styles from './Counter.module.css';
 
 const Counter = () => {
+  const dispatch = useDispatch();
+  {/* redux의 store에 action을 보내줄 수 있는 함수 
+      useDispatch()는 redux에 dispatch를 실행할 수 있는 함수를 반환함*/}
   const counter = useSelector((state) => {return state.counter})
   {/* useSelector 훅은 react-redux에서 개발 >> store의 state에 접근할 수 있게됨
       useSelector()의 인자로는 redux가 관리하는 state를 받고, state의 일부를 리턴하는 함수
@@ -11,10 +14,22 @@ const Counter = () => {
 
   const toggleCounterHandler = () => {};
 
+  const incrementHandler = () => {
+    dispatch({type: 'increment'})
+  }
+
+  const decrementHandler = () => {
+    dispatch({type: 'decrement'})
+  }
+
   return (
     <main className={styles.counter}>
       <h1>Redux Counter</h1>
       <div className={styles.value}>{counter}</div>
+      <div>
+        <button onClick={incrementHandler}>Increment</button>
+        <button onClick={decrementHandler}>Decrement</button>
+      </div>
       <button onClick={toggleCounterHandler}>Toggle Counter</button>
     </main>
   );
