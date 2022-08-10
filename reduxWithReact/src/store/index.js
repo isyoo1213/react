@@ -1,15 +1,15 @@
 import { createStore, combineReducers } from 'redux';
 
-{/* store에 slice된 reducer 여러개를 등록해야하는 상황 >> 원래 규칙은 store는 한 개의 리듀서 함수를 받음 
-    >> 이를 위해 combineReducers라는 redux의 패키지 사용 가능
-    >> but 더 쉽게 사용하기 위해 reduxtoolkit에 있는 configureStore를 통해 접근*/}
-
 import { createSlice, configureStore} from '@reduxjs/toolkit';
 
 {/* redux를 사용하면서 문제가 될 수 있는 부분 >> reduxToolkit 사용
     1. action의 identifier가 복잡해질 때 >> 상수화
     2. state가 늘어나면서 반환하는 state 객체가 뚱뚱해지는 경우
     3. 2와 마찬가지로 중첩 객체나 배열 등 반환하는 state 객체의 구조가 복잡할 때 기존의 state를 건드리는 이슈*/}
+
+{/* store에 slice된 reducer 여러개를 등록해야하는 상황 >> 원래 규칙은 store는 한 개의 리듀서 함수를 받음 
+>> 이를 위해 combineReducers라는 redux의 패키지 사용 가능
+>> but 더 쉽게 사용하기 위해 reduxtoolkit에 있는 configureStore를 통해 접근*/}
 
 export const INCREMENT = 'increment';
 
@@ -34,7 +34,8 @@ const counterSlice = createSlice({
   }
 });
 {/* 객체를 인자로서 생성함 >> 전역 state의 slice를 생성 (서로 다른 파일에서 사용되는 state들을 함께 관리할 수있도록) 
-    1. 세트로 사용할 state 묶음들의 이름
+    1. 세트로 사용할 state 묶음들의 이름 
+       >> 이는 이후에 기존의 서로 다른 action에 해당하는 리듀서들의 고유 액션 식별자를 자동 생성해줌 by counterSlice.actions
     2. 해당 state세트의 초기값
     3. 해당 state세트를 사용할 reducer의 if case문을 메서드화 >> 객체나 map의 상태로
        >> 메서드화 된 메서드는 state 스냅샷을 인자로 받음  
@@ -97,5 +98,13 @@ const store = configureStore({
                  counter: counterSlice.reducer
                } 
              });*/}
+
+export const counterActions = counterSlice.actions;
+{/* counterSlice.actions객체는 내부에 reduxToolkit에 의해 자동으로 생성된 메서드에 접근 가능 
+    >> 해당 메서드 호출시 사용할 수 있는 action 객체가 생성됨 - '액션 생성자'라고 불림
+    >> 생성된 action 객체 - 내부에 이미 우리가 만든 reducer메서드에 따른 type 프로퍼티와 액션마다 다른 고유식별자가 자동 생성됨
+    >> 즉, action 객체를 따로 생성할 필요 없이 Slice가 자동생성한 actions key 및 객체를 사용하면 됨 
+    >> 생성된 action객체 이름과 앞서 정의한 리듀서 메서드의 이름이 같으면 action이 자동으로 전달되어 서로다른 매서드 작동
+    이제 action과 store를 모두 export 하고 있으므로 이를 사용할 컴포넌트에서 작업*/}
 
 export default store;

@@ -1,6 +1,6 @@
 import { useSelector, useDispatch } from 'react-redux';
 import styles from './Counter.module.css';
-import { INCREMENT } from '../store/index';
+import { INCREMENT, counterActions } from '../store/index';
 
 const Counter = () => {
   const dispatch = useDispatch();
@@ -15,19 +15,26 @@ const Counter = () => {
   const showCounter = useSelector(state => state.showCounter)
 
   const toggleCounterHandler = () => {
-    dispatch({type: 'toggle'})
+    dispatch(counterActions.toggleCounter())
   };
 
   const incrementHandler = () => {
-    dispatch({type: INCREMENT})
+    // dispatch({type: INCREMENT})
+    dispatch(counterActions.increment())
+    {/* increment에 ()실행 중괄호가 붙은 이유(메서드로 실행시키는 이유) - 
+        >> 고유액션식별자가 자동으로 생성하게 설정된 '전체 액션 객체'를 만드는 '함수'
+        >> 함수 자체를를 전달하는 것이 아닌, 전체 액션 객체를 '생성'해서 전달해주어야 함 */}
   }
 
   const increaseHandler = () => {
-    dispatch({type: 'increase', payload: 5})
+    dispatch(counterActions.increase(5))
+    {/* payload가 필요한 경우 전체 액션 객체에 필요한 payload값을 인자로 넘겨주주면 자동으로 객체 내 payload 속성에 설정
+        ReduxToolkit이 자동으로 생성해준 액션 생성자를 통해 {type: SOME_UNIQUE_IDENTIFIER, payload: argument}를 설정 
+        payload 필드명은 reduxtoolkit이 사용하는 예약어 - 변경불가 >> 기존 slice에서 reducers 객체에도 action.payload 사용해야 함*/}
   }
 
   const decrementHandler = () => {
-    dispatch({type: 'decrement'})
+    dispatch(counterActions.decrement())
   }
 
   return (
