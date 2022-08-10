@@ -11,8 +11,11 @@ const Counter = () => {
       >> 해당 함수는 react-redux에서 실행 
       *** useSelector()는 컴포넌트를 위해 redux store에 subscription을 스스로 설정해줌
       해당 컴포넌트가 사라지고 DOM에서 제거되면 subscription도 스스로 해제함*/}
+  const showCounter = useSelector(state => state.showCounter)
 
-  const toggleCounterHandler = () => {};
+  const toggleCounterHandler = () => {
+    dispatch({type: 'toggle'})
+  };
 
   const incrementHandler = () => {
     dispatch({type: 'increment'})
@@ -29,7 +32,7 @@ const Counter = () => {
   return (
     <main className={styles.counter}>
       <h1>Redux Counter</h1>
-      <div className={styles.value}>{counter}</div>
+      {showCounter && <div className={styles.value}>{counter}</div>}
       <div>
         <button onClick={incrementHandler}>Increment</button>
         <button onClick={increaseHandler}>Increase by 5</button>
