@@ -9,6 +9,10 @@ const counterReducer = (state = {counter: 0}, action) => {
     return {
       counter: state.counter - 1
     }
+  } else if (action.type === 'increase'){
+    return {
+      counter: state.counter + action.payload
+    } 
   }
 
   return state;
