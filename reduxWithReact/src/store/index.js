@@ -1,6 +1,7 @@
-import { createStore, combineReducers } from 'redux';
+import { configureStore} from '@reduxjs/toolkit';
 
-import { createSlice, configureStore} from '@reduxjs/toolkit';
+import counterReducer from './counter-slice';
+import authReducer from './auth-slice';
 
 {/* redux를 사용하면서 문제가 될 수 있는 부분 >> reduxToolkit 사용
     1. action의 identifier가 복잡해질 때 >> 상수화
@@ -10,40 +11,6 @@ import { createSlice, configureStore} from '@reduxjs/toolkit';
 {/* store에 slice된 reducer 여러개를 등록해야하는 상황 >> 원래 규칙은 store는 한 개의 리듀서 함수를 받음 
 >> 이를 위해 combineReducers라는 redux의 패키지 사용 가능
 >> but 더 쉽게 사용하기 위해 reduxtoolkit에 있는 configureStore를 통해 접근*/}
-
-export const INCREMENT = 'increment';
-
-const initialCounterState = {counter: 0, showCounter: true}
-
-const counterSlice = createSlice({
-  name: 'counter',
-  initialState: initialCounterState,
-  reducers: {
-    increment(state){
-      state.counter++;
-    },
-    decrement(state){
-      state.counter--;
-    },
-    increase(state, action){
-      state.counter = state.counter + action.payload
-    },
-    toggleCounter(state){
-      state.showCounter = !state.showCounter
-    }
-  }
-});
-{/* 객체를 인자로서 생성함 >> 전역 state의 slice를 생성 (서로 다른 파일에서 사용되는 state들을 함께 관리할 수있도록) 
-    1. 세트로 사용할 state 묶음들의 이름 
-       >> 이는 이후에 기존의 서로 다른 action에 해당하는 리듀서들의 고유 액션 식별자를 자동 생성해줌 by counterSlice.actions
-    2. 해당 state세트의 초기값
-    3. 해당 state세트를 사용할 reducer의 if case문을 메서드화 >> 객체나 map의 상태로
-       >> 메서드화 된 메서드는 state 스냅샷을 인자로 받음  
-          but, action은 받지않음 >> action의 case별로 나눈 메서드이고, action의 분기에 따라 자동으로 호출됨
-    *** 메서드의 실행구문으로 state를 직접 변형 >> 실제로는 기존 state를 변경하는 것이 아님
-        >> reduxToolkit이 내부에서 사용하는 immer 패키지에서 해당 코드를 인식해 자동으로 원래 있는 state의 상태를 복제해
-           새로운 state 객체를 생성 >> 모든 기존의 state자체는 변경되지 않도록 유지하면서, 우리가 변경한 state만 변하지 않도록(immutable하도록) 오버라이딩함 >>>>>> 여튼 state를 직접 변경하는 코드를 작성해도 내부적으로 알아서 immutable코드로 변환함
-      * 메서드가 payload를 가진 사용자 정의의 메서드일 경우 - action인자를 추가로 받음*/}
 
 // const counterReducer = (state = initialState, action) => {
 //   if(action.type === INCREMENT){
@@ -85,27 +52,12 @@ const counterSlice = createSlice({
 // const store = createStore(counterSlice.reducer);
 // {/* counterSlice.reducer는 기존의 counterReducer구조에서 if case를 대체한 reducers를 통합한 reducer를 반환함 */}
 
-const initialAuthState = {
-  isAuthenticated: false,
-}
 
-const authSlice = createSlice({
-  name: 'auth',
-  initialState: initialAuthState,
-  reducers: {
-    login(state){
-      state.isAuthenticated = true;
-    },
-    logout(state){
-      state.isAuthenticated = false;
-    }
-  }
-});
 
 const store = configureStore({
   reducer:{
-    counter: counterSlice.reducer,
-    auth: authSlice.reducer
+    counter: counterReducer,
+    auth: authReducer
   } 
 });
 {/* configureStore()는 reducer함수가 아닌 '설정' 객체를 받음 >> 설정 객체는 reducer 프로퍼티를 설정 
@@ -119,13 +71,13 @@ const store = configureStore({
                } 
              });*/}
 
-export const counterActions = counterSlice.actions;
+
 {/* counterSlice.actions객체는 내부에 reduxToolkit에 의해 자동으로 생성된 메서드에 접근 가능 
     >> 해당 메서드 호출시 사용할 수 있는 action 객체가 생성됨 - '액션 생성자'라고 불림
     >> 생성된 action 객체 - 내부에 이미 우리가 만든 reducer메서드에 따른 type 프로퍼티와 액션마다 다른 고유식별자가 자동 생성됨
     >> 즉, action 객체를 따로 생성할 필요 없이 Slice가 자동생성한 actions key 및 객체를 사용하면 됨 
     >> 생성된 action객체 이름과 앞서 정의한 리듀서 메서드의 이름이 같으면 action이 자동으로 전달되어 서로다른 매서드 작동
     이제 action과 store를 모두 export 하고 있으므로 이를 사용할 컴포넌트에서 작업*/}
-export const authActions = authSlice.actions;
+
 
 export default store;

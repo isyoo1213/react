@@ -1,6 +1,6 @@
 import { useSelector, useDispatch } from 'react-redux';
 import styles from './Counter.module.css';
-import { INCREMENT, counterActions } from '../store/index';
+import { counterActions } from '../store/counter-slice'
 
 const Counter = () => {
   const dispatch = useDispatch();
