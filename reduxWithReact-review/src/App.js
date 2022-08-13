@@ -6,7 +6,7 @@ import Cart from "./components/Cart/Cart";
 import Layout from "./components/Layout/Layout";
 import Products from "./components/Shop/Products";
 import Notification from "./components/UI/Notification";
-import { sendCartDataFromSlice } from './store/cart-slice';
+import { sendCartDataFromFn, fetchCartData } from './store/cart-actions';
 
 let isInitial = true;
 {/* 컴포넌트가 렌더될 때 다시 초기화되지 않고, 파일이 parse될 때 초기화 되도록 컴포넌트 외부에 선언 및 초기화 */}
@@ -17,6 +17,13 @@ function App() {
   const cart = useSelector((state) => state.cart);
   const notification = useSelector((state) => state.ui.notification);
   const dispatch = useDispatch();
+
+  useEffect(()=>{
+    dispatch(fetchCartData());
+  }, [dispatch])
+
+  {/* fetchCartData()를 통해 firebase에 저장된 데이터를 가져오면 cart객체 또한 변경되어 아래 useEffect의 의존성이 변해
+      트리거 됨 >> 처리 필요 */}
 
   useEffect(() => {
     // const sendCartData = async () => {
@@ -64,7 +71,9 @@ function App() {
     //   );
     // });
 
-    dispatch(sendCartDataFromSlice(cart))
+    if(cart.changed){
+      dispatch(sendCartDataFromFn(cart))
+    }
 
   }, [cart, dispatch]);
   {
