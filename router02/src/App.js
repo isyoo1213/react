@@ -14,10 +14,10 @@ function App() {
         <Route path='/quotes' exact>
           <AllQuotes />
         </Route>
-        <Route path='/quotes/:quoteId' exact>
+        <Route path='/quotes/:quoteId'>
           <QuoteDetail />
         </Route>
-        <Route path='/new-quote' exact>
+        <Route path='/new-quote'>
           <NewQuote />
         </Route>
       </Switch>
