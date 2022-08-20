@@ -17,6 +17,11 @@ const NewCommentForm = (props) => {
       onAddedComment();
     }
   }, [status, error, onAddedComment]);
+  {/* onAddedComment는 부모 컴포넌트에서 props를 통해 전달
+      - quoteId를 인자로 useHttp를 실행하는 addedCommentHandler 함수
+      - comment 추가와 관련 없이, GET 메서드로 해당 quoteId에 대한 All comments를 받아옴
+      - submit 후, sendRequest의 결과에 따른 status, error에 따라  quoteId의 모든 comments를 받아오는 함수를 재사용함
+        의존성을 현재 컴포넌트의 변수들로 사용하기 위해 props dril */}
 
   const submitFormHandler = (event) => {
     event.preventDefault();
