@@ -1,9 +1,11 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Link } from "react-router-dom";
 
 const Welcome = () => {
   return (
     <section>
       <h1>The Welcome Page</h1>
+      <Link to='new-user'>New User</Link>
+      {/* 링크 또한 이미 정의된 routes를 통해 로드된 컴포넌트 내에서 정의가 이루어지므로 상대경로 파악함 */}
       <Routes>
         <Route path="new-user" element={<p>Welcome, new user!</p>}>
         </Route>
