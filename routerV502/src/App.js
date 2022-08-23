@@ -1,4 +1,4 @@
-import { Route, Switch, Redirect } from 'react-router-dom';
+import { Route, Routes, Navigate } from 'react-router-dom';
 
 import Welcome from './pages/Welcome';
 import Products from './pages/Products';
@@ -10,20 +10,17 @@ function App() {
     <div>
       <MainHeader />
       <main>
-        <Switch>
-          <Route path='/' exact>
-            <Redirect to='/welcome' />
-          </Route>
-          <Route path='/welcome'>
-            <Welcome />
-          </Route>
-          <Route path='/products' exact>
-            <Products />
-          </Route>
-          <Route path='/products/:productId'>
-            <ProductDetail />
-          </Route>
-        </Switch>
+        <Routes>
+          <Route path='/' exact element={<Navigate replace to='/welcome' />} />
+          {/* element요소로 Navigate JSX를 정의하면 해당 path에 대한 페이지 탐색을 탐색 스택으로 푸시함
+              현재 페이지를 새 페이지로 바꾸는 redirect를 원할 경우 replace prop도 추가해야 함
+              >> 새 페이지 push !== Redirecting */}
+          <Route path='/welcome/*' element={<Welcome />} />
+          {/* /welcome 만을 통해 welcome의 section내 h1만을 로드하고 싶을 경우
+              >> section 내에 정의된 중첩라우트 또한 인식하고 로드할 수 있어야 함 */}
+          <Route path='/products' exact element={<Products />} />
+          <Route path='/products/:productId' element={<ProductDetail />} />
+        </Routes>
       </main>
     </div>
   );
