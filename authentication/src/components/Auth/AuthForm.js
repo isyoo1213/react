@@ -63,7 +63,8 @@ const AuthForm = () => {
       })
       .then((data) => {
         authCtx.login(data.idToken);
-        console.log(authCtx.token);
+        console.log(authCtx.token, authCtx.isLoggedIn);
+        {/* state변경은 우선 스케쥴링에만 적용? */}
       })
       .catch((err) => {
         alert(err.message);
