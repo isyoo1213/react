@@ -1,4 +1,5 @@
 import { useState, useRef, useContext } from "react";
+import { useHistory } from "react-router-dom";
 import AuthContext from "../../store/auth-context";
 
 import classes from "./AuthForm.module.css";
@@ -11,6 +12,8 @@ const AuthForm = () => {
 
   const emailInputRef = useRef();
   const passwordInputRef = useRef();
+
+  const history = useHistory();
 
   const switchAuthModeHandler = () => {
     setIsLogin((prevState) => !prevState);
@@ -65,6 +68,8 @@ const AuthForm = () => {
         authCtx.login(data.idToken);
         console.log(authCtx.token, authCtx.isLoggedIn);
         {/* state변경은 우선 스케쥴링에만 적용? */}
+        history.replace('/');
+        {/* replace는 뒤로가기를 통해 이전 페이지 갈 수 없도록 차단 */}
       })
       .catch((err) => {
         alert(err.message);
