@@ -65,7 +65,8 @@ const AuthForm = () => {
         }
       })
       .then((data) => {
-        authCtx.login(data.idToken);
+        const expirationTime = new Date(new Date().getTime() + (+data.expiresIn * 1000))
+        authCtx.login(data.idToken, expirationTime.toISOString());
         console.log(authCtx.token, authCtx.isLoggedIn);
         {/* state변경은 우선 스케쥴링에만 적용? */}
         history.replace('/');

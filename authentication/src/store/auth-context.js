@@ -7,6 +7,15 @@ const AuthContext = React.createContext({
   logout: () => {},
 });
 
+const calculateRemainingTime = (expirationTime) => {
+  const currentTime = new Date().getTime();
+  const adjExpirationTime = new Date(expirationTime).getTime();
+
+  const remainingDuration = adjExpirationTime - currentTime;
+
+  return remainingDuration;
+}
+
 export const AuthContextProvider = (props) => {
   const initialToken = localStorage.getItem('token');
   {/* localStorage는 synchronous API이므로 가능 */}
@@ -14,9 +23,13 @@ export const AuthContextProvider = (props) => {
 
   const userIsLoggedIn = !!token;
 
-  const loginHandler = (token) => {
+  const loginHandler = (token, expirationTime) => {
     setToken(token);
     localStorage.setItem('token', token);
+
+    const remainingTime = calculateRemainingTime(expirationTime)
+
+    setTimeout(logoutHandler, 3000);
   };
 
   const logoutHandler = () => {
