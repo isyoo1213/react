@@ -14,7 +14,7 @@ export const useStore = () => {
       why? - 이 커스텀 훅을 호출하는 컴포넌트는 재렌더링. 즉 재렌더링을 하기 위해. */}
 
   const dispatch = (actionIdentifier) => {
-    const newState = actions[actionIdentifier](globalState);
+    const newState = actions[actionIdentifier](globalState, payload);
     {/* action들은 함수여야 함. 즉 actions 객체에 actionIdentifier의 키를 통해 등록된 구체적인 함수. 소괄호를 통해 호출 */}
 
     globalState = {...globalState, ...newState};
