@@ -21,6 +21,8 @@ export const useStore = () => {
 
     for(const listener of listeners){
       listener(globalState)
+      {/* listeners 배열 내의 요소들은 useEffect를 통해 push해준 setState 업데이트 함수
+          >> 즉 setState를 push한 모든 컴포넌트에 변경된 globalState를 업데이트 해주는 역할 */}
     }
   }
 
