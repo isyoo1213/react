@@ -13,7 +13,7 @@ export const useStore = () => {
   {/* 현재는 usState의 두 번째 리턴인 set함수에만 관심이 있음. state의 스냅샷은 나중에. 
       why? - 이 커스텀 훅을 호출하는 컴포넌트는 재렌더링. 즉 재렌더링을 하기 위해. */}
 
-  const dispatch = (actionIdentifier) => {
+  const dispatch = (actionIdentifier, payload) => {
     const newState = actions[actionIdentifier](globalState, payload);
     {/* action들은 함수여야 함. 즉 actions 객체에 actionIdentifier의 키를 통해 등록된 구체적인 함수. 소괄호를 통해 호출 */}
 
@@ -42,6 +42,6 @@ export const useStore = () => {
 export const initStore = (userActions, initialState) => {
   if(initialState){
     globalState = {...globalState, ...initialState}
-    actions = {...actions, ...userActions}
   }
+  actions = {...actions, ...userActions}
 }
